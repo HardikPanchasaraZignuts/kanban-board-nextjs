@@ -1,15 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
-    Box,
-  Button,
   Dialog,
-  DialogActions,
-  DialogContent,
   DialogTitle,
-  TextField,
+  DialogContent,
+  DialogActions,
+  Button,
 } from "@mui/material";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import FormTextField from "./FormTextField"; // same component used in TaskModal
+
+const columnSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+});
+
+type ColumnFormData = z.infer<typeof columnSchema>;
 
 type Props = {
   open: boolean;
@@ -18,42 +26,52 @@ type Props = {
   defaultTitle?: string;
 };
 
-const ColumnModal = ({ open, onClose, defaultTitle = "" }: Props) => {
-  const [title, setTitle] = useState(defaultTitle);
+export default function ColumnModal({
+  open,
+  onClose,
+  onSubmit,
+  defaultTitle = "",
+}: Props) {
+  const { control, handleSubmit, reset } = useForm<ColumnFormData>({
+    resolver: zodResolver(columnSchema),
+    defaultValues: {
+      title: defaultTitle,
+    },
+  });
+
   useEffect(() => {
-    setTitle(defaultTitle);
-  }, [defaultTitle]);
-  const handleSubmit = () => {
-    if (title.trim()) {
-        console.log(title.trim());
-        setTitle('')
-        onClose();
+    reset({ title: defaultTitle });
+  }, [defaultTitle, reset]);
+
+  const onFormSubmit = (data: ColumnFormData) => {
+    if (onSubmit) {
+      onSubmit(data.title.trim());
     }
+    console.log('data', data)
+    reset(); // Clear form after submit
+    onClose();
   };
 
   return (
-    <Dialog onClose={onClose} open={open} fullWidth >
+    <Dialog onClose={onClose} open={open} fullWidth>
       <DialogTitle>{defaultTitle ? "Edit Column" : "Add Column"}</DialogTitle>
-          <DialogContent>
-              <Box marginTop={2} >
-                  
-        <TextField
-          autoFocus
-          label="Column Title"
-          fullWidth
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+      <form onSubmit={handleSubmit(onFormSubmit)}>
+        <DialogContent>
+          <FormTextField
+            name="title"
+            label="Column Title"
+            control={control}
+            autoFocus
+            fullWidth
           />
-          </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="contained">
-          {defaultTitle ? "Update" : "Add"}
-        </Button>
-      </DialogActions>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button type="submit" variant="contained">
+            {defaultTitle ? "Update" : "Add"}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
-};
-
-export default ColumnModal;
+}
