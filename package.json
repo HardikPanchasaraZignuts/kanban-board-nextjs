@@ -24,6 +24,7 @@
     "react-hook-form": "^7.56.4",
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
+    "uuid": "^11.1.0",
     "zod": "^3.25.42"
   },
   "devDependencies": {
