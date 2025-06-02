@@ -9,7 +9,9 @@ import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from "
 export default function Home() {
   const { data: board = [], isLoading } = useGetBoardQuery();
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(useSensor(PointerSensor,{
+    activationConstraint: { distance: 2 }
+  }));
   const [moveTask] = useMoveTaskMutation();
 
   const handleDragEnd = (event: DragEndEvent) => {

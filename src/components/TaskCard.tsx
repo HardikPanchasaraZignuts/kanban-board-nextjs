@@ -66,12 +66,16 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
               <EditIcon
                 fontSize="small"
                 className="mr-2 text-indigo-500"
-                onClick={() => setTaskModal(true)}
+                onClick={() => {
+                  setTaskModal(true);
+                }}
               />
               <DeleteIcon
                 fontSize="small"
                 className="text-red-500"
-                onClick={() => setConfirmDeleteModal(true)}
+                onClick={() => {
+                  setConfirmDeleteModal(true)
+                }}
               />
             </Box>
           </div>
