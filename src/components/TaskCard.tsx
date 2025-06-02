@@ -66,13 +66,6 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
             />
           </Box>
         </div>
-        <span
-          className={`text-xs text-center font-medium px-3 py-1 rounded-full ${getPriorityColor(
-            task.priority
-          )}`}
-        >
-          {capitalize(task.priority)}
-        </span>
 
         <Typography
           variant="body2"
@@ -80,6 +73,14 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
         >
           {task.description}
         </Typography>
+        
+        <span
+          className={`text-xs text-center font-medium px-3 py-1 rounded-full ${getPriorityColor(
+            task.priority
+          )}`}
+        >
+          {capitalize(task.priority)}
+        </span>
 
         <div className="flex justify-between items-center text-xs text-slate-500 mt-1">
           <div className="flex items-center gap-1">

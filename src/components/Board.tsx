@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -85,8 +86,10 @@ const Board = () => {
                     {col.title}
                   </Typography>
                   <div className="flex gap-1">
-                    <IconButton
-                      color="primary"
+                    <Button
+                      disableRipple
+                      disableFocusRipple
+                      sx={{ textTransform: "none" }}
                       onClick={() => {
                         setSelectedColumn(col);
                         setInitialData({});
@@ -94,7 +97,8 @@ const Board = () => {
                       }}
                     >
                       <AddIcon />
-                    </IconButton>
+                      <span >Add Task</span>
+                    </Button>
 
                     <IconButton
                       color="primary"

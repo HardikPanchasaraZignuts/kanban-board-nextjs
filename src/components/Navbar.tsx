@@ -1,5 +1,5 @@
 "use client";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, Toolbar, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import ColumnModal from "./ColumnModal";
@@ -22,19 +22,17 @@ const Navbar = () => {
           >
             Kanban Board
           </Typography>
-          <IconButton
-            className="text-white hover:text-indigo-200 "
-            onClick={() => setColumnModal(true)}
-          >
+          <Button sx={{ textTransform: 'none'}}  onClick={() => setColumnModal(true)}>
             <AddIcon className="text-white" />
-          </IconButton>
+            <span className="text-white">Add Column</span>
+          </Button>
         </Toolbar>
       </AppBar>
       <ColumnModal
         open={columnModal}
         onClose={() => setColumnModal(false)}
         onSubmit={async (title) => {
-          await addColumn({title})
+          await addColumn({ title });
         }}
       />
     </>
