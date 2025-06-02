@@ -133,7 +133,7 @@ const ColumnComponent = ({ col }: ColumnProps) => {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           {col.tasks.map((task) => (
             <TaskCard key={task.id} task={task} columnId={col.id} />
           ))}

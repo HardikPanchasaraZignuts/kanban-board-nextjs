@@ -34,9 +34,12 @@ const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 const TaskCard = ({ task, columnId }: TaskCardProps) => {
   const [taskModal, setTaskModal] = useState(false);
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: `${task.id}::${columnId}`
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: `${task.id}::${columnId}`,
   })
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+  } : undefined;
 
   const [updateTask] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation()
@@ -53,7 +56,7 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
 
   return (
     <>
-      <div ref={setNodeRef} {...listeners} {...attributes}  >
+      <div ref={setNodeRef} {...listeners} {...attributes} style={style}  >
         <Card className="p-5 rounded-2xl cursor-pointer transition-shadow hover:shadow-md flex flex-col gap-3 border border-gray-100">
           <div className="flex justify-between items-start">
             <Typography className="font-semibold text-slate-800 text-lg">

@@ -28,9 +28,9 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      <div className="min-h-[calc(100vh-64px)] p-4 bg-slate-50">
+      <div className="min-h-[calc(100vh-64px)] p-4 bg-slate-50 flex flex-col">
         <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-          <div className="flex gap-4 overflow-x-auto pb-4">
+          <div className="flex-1 flex gap-4 overflow-x-auto pb-4">
             {isLoading
               ? [...Array(3)].map((_, i) => (
                   <Skeleton
