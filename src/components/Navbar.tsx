@@ -3,10 +3,13 @@ import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import ColumnModal from "./ColumnModal";
+import { useAddColumnMutation } from "@/lib/features/board/boardApi";
 
 
 const Navbar = () => {
   const [columnModal, setColumnModal] = useState(false)
+  const [addColumn] = useAddColumnMutation();
+
   return (
     <>
       <AppBar position="static" className="bg-indigo-500 shadow-md">
@@ -27,7 +30,13 @@ const Navbar = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <ColumnModal open={columnModal} onClose={() => setColumnModal(false)} />
+      <ColumnModal
+        open={columnModal}
+        onClose={() => setColumnModal(false)}
+        onSubmit={async (title) => {
+          await addColumn({title})
+        }}
+      />
     </>
   );
 };

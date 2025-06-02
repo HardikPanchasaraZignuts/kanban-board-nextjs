@@ -55,9 +55,8 @@ export default function TaskModal({
     });
   }, [initialData, columnId, reset]);
 
-    const onFormSubmit = (data: TaskFormData) => {
-      
-        console.log('data', data)
+  const onFormSubmit = (data: TaskFormData) => {
+    console.log("data", data);
     const formattedAssignees =
       typeof data.assignees === "string"
         ? data.assignees.split(",").map((a) => a.trim())
@@ -114,7 +113,14 @@ export default function TaskModal({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button
+            onClick={() => {
+              onClose();
+              reset();
+            }}
+          >
+            Cancel
+          </Button>
           <Button type="submit" variant="contained">
             {initialData?.title ? "Update Task" : "Add Task"}
           </Button>

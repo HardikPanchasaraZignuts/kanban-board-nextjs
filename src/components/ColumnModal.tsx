@@ -47,7 +47,6 @@ export default function ColumnModal({
     if (onSubmit) {
       onSubmit(data.title.trim());
     }
-    console.log('data', data)
     reset(); // Clear form after submit
     onClose();
   };
@@ -66,7 +65,10 @@ export default function ColumnModal({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={() => {
+            onClose();
+            reset();
+          }}>Cancel</Button>
           <Button type="submit" variant="contained">
             {defaultTitle ? "Update" : "Add"}
           </Button>

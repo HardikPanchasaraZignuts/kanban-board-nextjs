@@ -1,8 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { boardApi } from "./features/board/boardApi";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {},
+    reducer: {
+      [boardApi.reducerPath]: boardApi.reducer,
+    },
+
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(boardApi.middleware),
   });
 };
 
