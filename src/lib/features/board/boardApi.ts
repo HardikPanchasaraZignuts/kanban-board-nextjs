@@ -145,6 +145,41 @@ export const boardApi = createApi({
         },
       }
     ),
+
+    moveTask: builder.mutation<void, {
+      fromColumnId: string;
+      toColumnId: string;
+      taskId: string;
+      newIndex: number;
+    }>({
+      query: (payload) => ({
+        url: "/board/move-task",
+        method: 'PATCH',
+        body: payload,
+      }),
+      async onQueryStarted({ fromColumnId, toColumnId, taskId, newIndex }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          boardApi.util.updateQueryData("getBoard", undefined, (draft) => {
+            const fromCol = draft.find((col) => col.id === fromColumnId);
+            const toCol = draft.find((col) => col.id === toColumnId);
+            if (!fromCol || !toCol) return;
+
+            const index = fromCol.tasks.findIndex((t) => t.id === taskId);
+            if (index === -1) return;
+
+            const [movedTask] = fromCol.tasks.splice(index, 1);
+            toCol.tasks.splice(newIndex, 0, movedTask);
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      }
+    })
+
   }),
 });
 
@@ -156,4 +191,5 @@ export const {
   useAddTaskMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,
+  useMoveTaskMutation
 } = boardApi;

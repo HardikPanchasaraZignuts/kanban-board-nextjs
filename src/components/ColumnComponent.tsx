@@ -24,6 +24,7 @@ import {
 import { Column } from "@/app/api/data/store";
 import { Task } from "@/types/task";
 import ConfirmModal from "./ConfirmModal";
+import { useDroppable } from "@dnd-kit/core";
 
 interface ColumnProps {
   col: Column;
@@ -35,7 +36,10 @@ const ColumnComponent = ({ col }: ColumnProps) => {
   const [taskModal, setTaskModal] = useState(false);
   const [initialData, setInitialData] = useState({});
   const [selectedColumn, setSelectedColumn] = useState<null | Column>(null);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { setNodeRef } = useDroppable({
+    id: col.id,
+  });
 
   const [updateColumn] = useUpdateColumnMutation();
   const [deleteColumn] = useDeleteColumnMutation();
@@ -67,14 +71,14 @@ const ColumnComponent = ({ col }: ColumnProps) => {
   };
 
   return (
-    <div className="min-w-[300px] w-[300px]">
+    <div ref={setNodeRef} className="min-w-[300px] w-[300px]">
       <Paper
         elevation={3}
         className="p-4 rounded-xl bg-white shadow-md space-y-4"
       >
         <div className="flex justify-between items-center">
           <Typography variant="h6" className="text-slate-700 font-medium">
-            {col.title.length > 10 ? col.title.slice(0, 10) +  '...' : col.title}
+            {col.title.length > 12 ? col.title.slice(0, 12) +  '...' : col.title}
           </Typography>
           <div className="flex gap-1">
             <Button

@@ -7,35 +7,48 @@ export type Column = {
   tasks: Task[];
 };
 
-// const board: Column[] = [
-//   {
-//     id: uuid(),
-//     title: "To Do",
-//     tasks: [],
-//   },
-//   {
-//     id: uuid(),
-//     title: "In Progress",
-//     tasks: [],
-//   },
-//   {
-//     id: uuid(),
-//     title: "Done",
-//     tasks: [],
-//   },
-// ];
-
-
 const globalBoard = (globalThis as any).board || [
   {
     id: uuid(),
     title: "To Do",
-    tasks: [],
+    tasks: [
+      {
+        title: "UI changes",
+        description:
+          "make changes on the dashboard cards and aldo make changes on profile page, make reusable components as well",
+        priority: "medium",
+        estimatedHours: 3,
+        assignees: ["bhargav"],
+        endDate: "2025-06-25",
+        id: uuid(),
+      },
+      {
+        title: "Logic changes",
+        description:
+          "improve logic on redux and make optimistic ui through background api fetch",
+        priority: "high",
+        estimatedHours: 3,
+        assignees: ["manish"],
+        endDate: "2025-06-25",
+        id: uuid(),
+      },
+    ],
   },
   {
     id: uuid(),
     title: "In Progress",
-    tasks: [],
+    tasks: [
+      {
+        title: "APIs changes",
+        description:
+          "we need change profile api, add profile pic on that",
+        priority: "medium",
+        estimatedHours: 4,
+        assignees: ["sachin"],
+        endDate: "2025-06-23",
+        id: uuid(),
+      },
+    ],
   },
   {
     id: uuid(),
@@ -100,3 +113,34 @@ export const deleteTask = (columnId: string, taskId: string): boolean => {
   col.tasks.splice(index, 1);
   return true;
 };
+
+export const moveTask = (fromColumnId: string, toColumnId: string, taskId: string, newIndex: number): boolean => {
+  if (fromColumnId === toColumnId) {
+    console.log("Same column — skipping move");
+    return false;
+  }
+
+
+  const fromCol = board.find((col) => col.id === fromColumnId)
+  const toCol = board.find((col) => col.id === toColumnId)
+
+  if (!fromCol || !toCol) {
+    console.log("One of the columns not found", { fromCol, toCol });
+    return false;
+  }
+
+  const taskIndex = fromCol.tasks.findIndex((task) => task.id === taskId)
+  console.log('taskIndex', taskIndex)
+  if (taskIndex === -1) {
+    console.log("Task not found in source column");
+    return false;
+  }
+
+  const [task] = fromCol.tasks.splice(taskIndex, 1); 
+  const index = Math.max(0, Math.min(newIndex, toCol.tasks.length))
+  toCol.tasks.splice(index, 0, task)
+
+  console.log("Task moved successfully");
+
+  return true;
+}
