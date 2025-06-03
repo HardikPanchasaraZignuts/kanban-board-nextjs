@@ -1,5 +1,6 @@
 import { Column } from "@/app/api/data/store";
 import { Task } from "@/types/task";
+import { showErrorToast } from "@/utils/toast";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { v4 as uuid } from "uuid";
 
@@ -28,8 +29,10 @@ export const boardApi = createApi({
         try {
           await queryFulfilled; 
           dispatch(boardApi.util.invalidateTags(["Board"]));
-        } catch {
+        } catch (err: any) {
+          console.error("Error adding column:", err);
           patchResult.undo();
+          showErrorToast("Failed to add column, please try later.");
         }
       },
     }),
@@ -51,6 +54,7 @@ export const boardApi = createApi({
           await queryFulfilled;
         } catch {
           patchResult.undo();
+          showErrorToast("Failed to update column, please try later.");
         }
       },
     }),
@@ -71,6 +75,7 @@ export const boardApi = createApi({
           await queryFulfilled;
         } catch {
           patchResult.undo();
+          showErrorToast("Failed to delete column, please try later.");
         }
       },
     }),
@@ -94,6 +99,7 @@ export const boardApi = createApi({
           dispatch(boardApi.util.invalidateTags(["Board"]));
         } catch {
           patchResult.undo();
+          showErrorToast("Failed to add task, please try later.");
         }
       },
     }),
@@ -119,6 +125,7 @@ export const boardApi = createApi({
           await queryFulfilled;
         } catch {
           patchResult.undo();
+          showErrorToast("Failed to update task, please try later.");
         }
       },
     }),
@@ -141,6 +148,7 @@ export const boardApi = createApi({
             await queryFulfilled;
           } catch {
             patchResult.undo();
+            showErrorToast("Failed to delete task, please try later.");
           }
         },
       }
@@ -174,8 +182,10 @@ export const boardApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch(err : any) {
           patchResult.undo();
+          const errorMsg = err?.error?.data?.error || "Failed to move task.";
+          showErrorToast(errorMsg);
         }
       }
     })
